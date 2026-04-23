@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pick Builder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Pick Builder</h1>
+  <div class="header-right">
+    <span id="stats"></span>
+    <button class="btn btn-ghost" onclick="openModal('import-modal')">Import Data</button>
+    <button class="btn btn-primary" onclick="exportMapping()">Export Map</button>
+    <button class="btn btn-fetch" id="fetch-ids-btn" onclick="fetchGroupIds()">Get Group IDs</button>
+    <button class="session-indicator" id="session-indicator" onclick="openModal('sessions-modal')">Session</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- ── LEFT: ITEMS ── -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-row">
+        <h2>Items</h2>
+        <span class="panel-count" id="items-count">0</span>
+      </div>
+      <input class="search-input" id="items-search" type="text"
+             placeholder="Search items…" oninput="renderItems()">
+    </div>
+    <div class="panel-body" id="items-list"></div>
+  </div>
+
+  <!-- ── CENTER: ITEM WORKSPACE ── -->
+  <div class="panel workspace-panel">
+    <div class="workspace-header" id="workspace-header">
+      <div class="workspace-no-selection" id="workspace-no-sel">
+        <span>← Select an item to begin</span>
+      </div>
+      <div class="workspace-item-info" id="workspace-item-info" style="display:none">
+        <div>
+          <div class="workspace-item-label">Working on</div>
+          <div>
+            <span class="workspace-item-id" id="ws-item-id"></span>
+            <span class="workspace-item-name" id="ws-item-name"></span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openCreatePickModal()">+ New Pick</button>
+      </div>
+    </div>
+    <div class="panel-body" id="workspace-body">
+      <div class="workspace-empty" id="workspace-empty">
+        <div class="workspace-empty-icon">🗂</div>
+        <div>Select an item from the list<br>to view and manage its picks.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: PICK BANK ── -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-title-row">
+        <h2>Pick Bank</h2>
+        <span class="panel-count" id="bank-count">0</span>
+      </div>
+      <div class="panel-search-row">
+        <input class="search-input" id="bank-search" type="text"
+               placeholder="Search picks…" oninput="renderBank()" style="flex:1">
+        <button class="btn btn-ghost btn-sm" onclick="openCreatePickModal()">+ Pick</button>
+      </div>
+    </div>
+    <div class="bank-hint" id="bank-hint">Select an item, then click a pick to assign it.</div>
+    <div class="panel-body" id="bank-list"></div>
+  </div>
+
+</div><!-- end .main -->
+
+
+<!-- ── IMPORT MODAL ── -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal">
+    <h2>Import Data</h2>
+    <p class="hint">Paste JSON with <code>items</code> and/or <code>modifiers</code> arrays.
+       Each entry needs an <code>id</code> and <code>description</code>. Importing is additive.</p>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">JSON</label>
+        <textarea class="form-input" id="import-json"
+          placeholder='{"items":[{"id":"ITM-001","description":"Cheese Burger"}],"modifiers":[{"id":"MOD-001","description":"Cheddar"}]}'></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="clearAllData()">Clear All</button>
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn btn-primary" onclick="importData()">Import</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── SESSIONS MODAL ── -->
+<div class="modal-overlay" id="sessions-modal">
+  <div class="modal">
+    <h2>Sessions</h2>
+    <p class="hint">Each session has its own items, picks, and modifiers. Data is saved automatically.</p>
+    <div class="modal-body">
+      <div class="sessions-toolbar">
+        <span style="font-size:13px; color:var(--text-muted)">All sessions, most recent first</span>
+        <button class="btn btn-primary btn-sm" onclick="newSession()">+ New Session</button>
+      </div>
+      <div id="sessions-list"></div>
+    </div>
+    <div class="modal-footer">
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" onclick="closeModals()">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── CREATE PICK MODAL ── -->
+<div class="modal-overlay" id="create-pick-modal">
+  <div class="modal modal-sm">
+    <h2>New Pick</h2>
+    <p class="hint" id="create-pick-hint">Name this pick, then add modifiers to it.</p>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Pick Name</label>
+        <input class="form-input" id="new-pick-name" type="text"
+               placeholder="e.g. Cheese Options"
+               onkeydown="if(event.key==='Enter') createPick()">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn btn-primary" onclick="createPick()">Create &amp; Add Modifiers →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── EDIT PICK MODAL ── -->
+<div class="modal-overlay" id="edit-pick-modal">
+  <div class="modal" style="max-width:580px;">
+    <h2 id="edit-pick-title">Edit Pick</h2>
+
+    <!-- Pick-level attributes -->
+    <div class="pick-settings-section">
+      <div class="form-group-inline">
+        <label class="form-label">Type</label>
+        <div class="type-toggle">
+          <button class="type-btn" data-value="optional" onclick="setPickType('optional')">Optional</button>
+          <button class="type-btn" data-value="required" onclick="setPickType('required')">Required</button>
+        </div>
+      </div>
+      <div class="form-group-inline">
+        <label class="form-label">Sort Order</label>
+        <input class="form-input-sm" type="number" id="pick-sort-order" min="0"
+               onchange="updatePickSortOrder(this.value)">
+      </div>
+      <div class="form-group-inline">
+        <label class="form-label">Items to Select</label>
+        <input class="form-input-sm" type="number" id="pick-items-to-select" min="1"
+               onchange="updatePickItemsToSelect(this.value)">
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <!-- Active modifier chips -->
+      <div class="form-group">
+        <label class="form-label">Active Modifiers</label>
+        <div id="edit-pick-chips" class="chip-list" style="min-height:30px;"></div>
+      </div>
+
+      <!-- Searchable modifier toggle list -->
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label">All Modifiers
+          <span style="font-size:10px; color:var(--text-muted); margin-left:6px; text-transform:none; letter-spacing:0;">
+            — click to toggle · set sort order &amp; default per modifier
+          </span>
+        </label>
+        <input class="form-input" id="edit-mod-search" type="text"
+               placeholder="Search modifiers…" oninput="renderEditModList()">
+      </div>
+      <div id="edit-mod-list" style="max-height:280px; overflow-y:auto;"></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="openModal('create-mod-modal')">+ New Modifier</button>
+      <div class="spacer"></div>
+      <button class="btn btn-primary" onclick="closeModals()">Done</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── CREATE MODIFIER MODAL ── -->
+<div class="modal-overlay" id="create-mod-modal">
+  <div class="modal modal-sm">
+    <h2>New Modifier</h2>
+    <p class="hint">Create a modifier not present in the imported data.</p>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Modifier ID</label>
+        <input class="form-input" id="new-mod-id" type="text" placeholder="e.g. MOD-999">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <input class="form-input" id="new-mod-desc" type="text"
+               placeholder="e.g. Grilled Onions"
+               onkeydown="if(event.key==='Enter') createModifier()">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="spacer"></div>
+      <button class="btn btn-ghost" onclick="backToEditPick()">Cancel</button>
+      <button class="btn btn-primary" onclick="createModifier()">Create</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="toast-container" id="toast-container"></div>
+<script src="app.js"></script>
+</body>
+</html>

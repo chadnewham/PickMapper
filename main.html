@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu Relationship Builder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Menu Relationship Builder</h1>
+            <div style="display:flex; gap:10px;">
+                <button onclick="showCreateGroupModal()" class="btn" style="background:#334155;">+ Pick Group</button>
+                <button onclick="showAddModifierModal()" class="btn">+ Modifier</button>
+                <button onclick="loadSampleData()" class="btn" style="background:#334155;">Sample</button>
+                <button onclick="exportFullJSON()" class="btn">Export</button>
+            </div>
+        </div>
+
+        <div class="main">
+
+            <!-- LEFT: 3-COLUMN PARENT CARDS -->
+            <div class="parents-section">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2 style="font-size:22px;">Parent Items</h2>
+                    <div id="stats" style="font-size:14px; color:#64748b;"></div>
+                </div>
+                <div id="parents-grid" class="parents-grid"></div>
+            </div>
+
+            <!-- RIGHT: TABBED PALETTE -->
+            <div class="palette">
+                <div class="tab-bar">
+                    <div onclick="switchPaletteTab(0)" id="tab-0" class="tab active">Pick Groups</div>
+                    <div onclick="switchPaletteTab(1)" id="tab-1" class="tab">Modifiers</div>
+                </div>
+
+                <input type="text" id="search-input" class="search-bar"
+                       placeholder="Search..." onkeyup="filterCurrentTab()">
+
+                <!-- Pick Groups Tab -->
+                <div id="tab-content-0">
+                    <div class="scroll-list" id="palette-groups"></div>
+                </div>
+
+                <!-- Modifiers Tab -->
+                <div id="tab-content-1" style="display: none;">
+                    <div class="scroll-list" id="palette-modifiers"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="add-modifier-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px;">Create New Modifier</h2>
+            <input id="new-mod-id" type="text" placeholder="Modifier ID (placeholder OK)"
+                   style="width:100%; padding:12px; margin-bottom:16px; background:#0f172a; border:1px solid #475569; border-radius:8px; color:white;">
+            <input id="new-mod-desc" type="text" placeholder="Description"
+                   style="width:100%; padding:12px; margin-bottom:24px; background:#0f172a; border:1px solid #475569; border-radius:8px; color:white;">
+            <div style="display:flex; gap:12px;">
+                <button onclick="hideModals()" style="flex:1; padding:12px; background:#334155; border:none; border-radius:8px; color:white;">Cancel</button>
+                <button onclick="addNewModifier()" class="btn" style="flex:1;">Add Modifier</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="create-group-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px;">Create New Pick Group</h2>
+            <input id="new-group-name" type="text" placeholder="Group Name"
+                   style="width:100%; padding:12px; margin-bottom:24px; background:#0f172a; border:1px solid #475569; border-radius:8px; color:white;">
+            <div style="display:flex; gap:12px;">
+                <button onclick="hideModals()" style="flex:1; padding:12px; background:#334155; border:none; border-radius:8px; color:white;">Cancel</button>
+                <button onclick="createNewPickGroup()" class="btn" style="flex:1;">Create Group</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

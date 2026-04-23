@@ -1,0 +1,35 @@
+{
+  "_comment": "Paste this into Populate & Export after building your pick mapping. groupId values here will be matched to items by ID; pickId values will be matched to picks by name.",
+  "items": [
+    { "id": "BUR-001", "groupId": "GRP-BURGER" },
+    { "id": "BUR-002", "groupId": "GRP-BURGER" },
+    { "id": "BUR-003", "groupId": "GRP-BURGER" },
+    { "id": "BUR-004", "groupId": "GRP-BURGER" },
+    { "id": "BUR-005", "groupId": "GRP-BURGER" },
+    { "id": "BUR-006", "groupId": "GRP-BURGER" },
+    { "id": "SAND-001", "groupId": "GRP-SANDWICH" },
+    { "id": "SAND-002", "groupId": "GRP-SANDWICH" },
+    { "id": "SAND-003", "groupId": "GRP-SANDWICH" },
+    { "id": "SAND-004", "groupId": "GRP-SANDWICH" },
+    { "id": "SAND-005", "groupId": "GRP-SANDWICH" },
+    { "id": "WRAP-001", "groupId": "GRP-WRAP" },
+    { "id": "WRAP-002", "groupId": "GRP-WRAP" },
+    { "id": "SALAD-001", "groupId": "GRP-SALAD" },
+    { "id": "SALAD-002", "groupId": "GRP-SALAD" },
+    { "id": "SALAD-003", "groupId": "GRP-SALAD" },
+    { "id": "PLATE-001", "groupId": "GRP-PLATE" },
+    { "id": "PLATE-002", "groupId": "GRP-PLATE" },
+    { "id": "PLATE-003", "groupId": "GRP-PLATE" },
+    { "id": "PLATE-004", "groupId": "GRP-PLATE" }
+  ],
+  "picks": [
+    { "name": "Protein", "pickId": "PCK-PROT" },
+    { "name": "Cheese", "pickId": "PCK-CHEESE" },
+    { "name": "Sauce", "pickId": "PCK-SAUCE" },
+    { "name": "Toppings", "pickId": "PCK-TOP" },
+    { "name": "Bun", "pickId": "PCK-BUN" },
+    { "name": "Temperature", "pickId": "PCK-TEMP" },
+    { "name": "Side", "pickId": "PCK-SIDE" },
+    { "name": "Dressing", "pickId": "PCK-DRESS" }
+  ]
+}

@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root { --primary: #3b82f6; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', system_ui, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+    color: #f1f5f9;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: #1e2937;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    overflow: hidden;
+}
+
+.header {
+    background: #0f172a;
+    padding: 20px 32px;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    background: linear-gradient(to right, #60a5fa, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    height: calc(100vh - 73px);
+}
+
+.parents-section {
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.parents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.parent-card {
+    background: #0f172a;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+    transition: all 0.2s;
+}
+
+.parent-card:hover { transform: translateY(-4px); }
+
+.parent-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #334155;
+}
+
+.parent-id {
+    font-family: monospace;
+    background: #1e2937;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #60a5fa;
+}
+
+.pick-group {
+    background: #1e2937;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+    border: 2px dashed transparent;
+    transition: all 0.2s;
+}
+
+.pick-group:hover { border-color: #475569; }
+
+.pick-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.palette {
+    background: #0f172a;
+    border-left: 1px solid #334155;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.tab-bar {
+    display: flex;
+    background: #1e2937;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab.active {
+    background: #3b82f6;
+    color: white;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1e2937;
+    border: 1px solid #475569;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    margin-bottom: 16px;
+}
+
+.scroll-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.draggable {
+    cursor: grab;
+    padding: 11px 14px;
+    background: #1e2937;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s;
+    font-size: 14.5px;
+}
+
+.draggable:hover {
+    background: #334155;
+    transform: translateX(4px);
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    background: #334155;
+    color: #e2e8f0;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 13px;
+    margin: 2px;
+}
+
+.btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-sm {
+    padding: 3px 9px;
+    font-size: 12px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1e2937;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 420px;
+    padding: 32px;
+}
